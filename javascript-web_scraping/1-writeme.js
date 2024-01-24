@@ -2,13 +2,10 @@
 
 const fs = require('fs');
 
-const msj = 'Python is cool';
+const file = process.argv[2];
 
-fs.writeFile('my_file.txt', msj, 'utf-8', (error) => {
+fs.writeFile(file, process.argv[3], 'utf-8', (error) => {
   if (error) {
     console.error(error);
   }
-//   } else {
-//     console.log('my_file.txt');
-//   }
 });
