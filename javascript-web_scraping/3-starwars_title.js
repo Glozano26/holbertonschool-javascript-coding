@@ -9,7 +9,7 @@ request.get(`${apiUrl}${ids}`, (error, response, body) => {
     console.error(error);
   } else {
     console.log(JSON.parse(body).title);
-    const data = JSON.parse(body);
+    // const data = JSON.parse(body);
     // console.log(JSON.stringify(data, null, 2));
     // console.log(data);
   }
