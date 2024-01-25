@@ -3,9 +3,9 @@ const request = require('request');
 
 const url = process.argv[2];
 
-request.get(url, (error, response, body) => {
-  if (error) {
-    console.error(error);
+request.get(url, (err, response, body) => {
+  if (err) {
+    console.error(err);
   }
   const completedTasks = {};
 
@@ -14,7 +14,7 @@ request.get(url, (error, response, body) => {
       if (!completedTasks[task.userId]) {
         completedTasks[task.userId] = 1;
       } else {
-        dictTask[task.userId]++;
+        completedTasks[task.userId]++;
       }
     }
   }
