@@ -6,18 +6,12 @@ const fs = require('fs');
 const url = process.argv[2];
 const file = process.argv[3];
 
-request.get(url, (error, response, body) => {
+request.get(url, (error, response) => {
   if (error) {
-    console.error('Error:', error);
-    return;
+    console.error(error);
   }
 
-  if (response.statusCode !== 200) {
-    console.error('Unexpected status code:', response.statusCode);
-    return;
-  }
-
-  fs.writeFile(file, body, (error) => {
+  fs.writeFile(file, response.body, 'utf-8', (error) => {
     if (error) {
       console.error(error);
     } else {
