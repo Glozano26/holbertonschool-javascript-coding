@@ -1,5 +1,4 @@
 function displayMessage(msg) {
-//   const msg = 'Hello NodeJS!';
-  process.stdout.write(msg);
+  console.log(msg);
 }
 module.exports = displayMessage;
