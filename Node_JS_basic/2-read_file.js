@@ -15,9 +15,9 @@ function countStudents(pathData) {
     const CSStudents = students.filter((student) => student.field === 'CS');
     const SWEStudents = students.filter((student) => student.field === 'SWE');
 
-    console.log('Number of students:', students.length);
-    console.log('Number of students in CS:', CSStudents.length, 'List:', CSStudents.map((student) => student.firstname).join(', '));
-    console.log('Number of students in SWE:', SWEStudents.length, 'List:', SWEStudents.map((student) => student.firstname).join(', '));
+    console.log('Number of students:', String(students.length));
+    console.log('Number of students in CS:', String(CSStudents.length), 'List:', CSStudents.map((student) => student.firstname).join(', '));
+    console.log('Number of students in SWE:', String(SWEStudents.length), 'List:', SWEStudents.map((student) => student.firstname).join(', '));
   } catch (error) {
     throw new Error('Cannot load the database: ', `${error}`);
   }
