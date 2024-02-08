@@ -1,3 +1,4 @@
+/* eslint-enable */
 function countStudents(pathData) {
   try {
     // eslint-disable-next-line
@@ -22,3 +23,4 @@ function countStudents(pathData) {
   }
 }
 module.exports = countStudents;
+/* eslint-enable */
