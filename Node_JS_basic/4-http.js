@@ -1,16 +1,15 @@
-const app = require('http');
+const http = require('http');
 
-const host = 'localhost';
+// const host = 'localhost';
 const port = 1245;
 
-const requestListener = function servers(req, res) {
-  res.writeHead(200);
+const app = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
   res.end('Hello Holberton School!');
-};
+});
 
-const server = app.createServer(requestListener);
 // eslint-disable-next-line
-server.listen(port, host, () => {
-  console.log(`Server is running on http://${host}:${port}`);
+app.listen(port, () => {
+  console.log(`Server is running on http://${port}`);
 });
 module.exports = app;
