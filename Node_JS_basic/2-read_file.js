@@ -1,15 +1,19 @@
-/* eslint-enable */
+const fs = require('fs');
+
 function countStudents(pathData) {
   try {
-    // eslint-disable-next-line
-    const fs = require('fs');
     const data = fs.readFileSync(pathData, 'utf-8').split('\n');
     const students = [];
 
     for (let i = 1; i < data.length; i += 1) {
       const [firstname, lastname, age, field] = data[i].trim().split(',');
-      // eslint-disable-next-line
-      students.push({firstname, lastname, age, field });
+
+      students.push({
+        firstname,
+        lastname,
+        age,
+        field,
+      });
     }
 
     const CSStudents = students.filter((student) => student.field === 'CS');
@@ -23,4 +27,3 @@ function countStudents(pathData) {
   }
 }
 module.exports = countStudents;
-/* eslint-enable */
