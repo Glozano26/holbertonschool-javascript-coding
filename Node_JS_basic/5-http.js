@@ -1,53 +1,57 @@
 const http = require('http');
-const parseCSV = require('csvtojson'); // Use external library for structured parsing
-
-const port = 1245;
-const csvFile = process.argv[2]; // Access database name from argument
-
-function countStudents(csvPath) {
-  return parseCSV() // Use promises for cleaner async handling
-    .fromFile(csvPath)
-    .then((data) => {
-      // Filter out empty lines and invalid students
-      const students = data.filter((student) => student.length > 0 && student.hasOwnProperty('First Name'));
-
-      const totalStudents = students.length;
-      const CSStudents = students.filter((student) => student['Program'] === 'CS');
-      const SWEStudents = students.filter((student) => student['Program'] === 'SWE');
-
-      return { totalStudents, CSStudents, SWEStudents };
-    });
-}
+const fs = require('fs');
 
 const app = http.createServer((req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
   if (req.url === '/') {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('Hello Holberton School!\n');
+    res.statusCode = 200;
+    res.end('Hello Holberton School!');
   } else if (req.url === '/students') {
-    countStudents(csvFile)
-      .then((students) => {
-        const { totalStudents, CSStudents, SWEStudents } = students;
+    fs.readFile(process.argv[2], 'utf8', (err, data) => {
+      if (err) {
+        res.statusCode = 500;
+        res.end('This is the list of our students\nCannot load the database');
+        return;
+      }
+      const lines = data.trim().split('\n');
+      const fields = lines[0].trim().split(',');
 
-        res.writeHead(200, {'Content-Type': 'text/plain'});
-        res.write('This is the list of our students\n');
-        res.write(`Number of students: ${totalStudents}\n`);
-        res.write(`Number of students in CS: ${CSStudents.length}. List: ${CSStudents.map((student) => student['First Name']).join(', ')}\n`);
-        res.write(`Number of students in SWE: ${SWEStudents.length}. List: ${SWEStudents.map((student) => student['First Name']).join(', ')}\n`);
-        res.end();
-      })
-      .catch((error) => {
-        console.error(error);
-        res.writeHead(500, {'Content-Type': 'text/plain'});
-        res.end('Internal Server Error\n');
+      // Extract unique fields from the data
+      const uniqueFields = [...new Set(lines.slice(1).map((line) => line.trim().split(',')[fields.indexOf('field')]))];
+
+      // Initialize an object to store students by field
+      const studentsByField = {};
+      uniqueFields.forEach((field) => {
+        studentsByField[field] = [];
       });
+
+      // Iterate over each line and organize students by field
+      lines.slice(1).forEach((line) => {
+        const values = line.trim().split(',');
+        const student = {};
+        for (let i = 0; i < fields.length; i += 1) {
+          student[fields[i]] = values[i];
+        }
+        studentsByField[student.field].push(student);
+      });
+
+      // Generate the response
+      const response = ['This is the list of our students'];
+
+      // Add number of students to the response
+      response.splice(1, 0, `Number of students: ${lines.length - 1}`);
+
+      Object.keys(studentsByField).forEach((field) => {
+        response.push(`Number of students in ${field}: ${studentsByField[field].length}. List: ${studentsByField[field].map((student) => student.firstname).join(', ')}`);
+      });
+      res.statusCode = 200;
+      res.end(response.join('\n'));
+    });
   } else {
-    res.writeHead(404, {'Content-Type': 'text/plain'});
-    res.end('Page not found\n');
+    res.statusCode = 404;
+    res.end('Not Found');
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
-
+app.listen(1245);
 module.exports = app;
