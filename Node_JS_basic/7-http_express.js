@@ -3,12 +3,14 @@ const fs = require('fs');
 
 const app = express();
 
+// eslint-disable-next-line
 app.get('/', (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
   res.statusCode = 200;
   res.end('Hello Holberton School!');
 });
 
+// eslint-disable-next-line
 app.get('/students', (req, res) => {
   fs.readFile(process.argv[2], 'utf8', (err, data) => {
     if (err) {
@@ -45,11 +47,13 @@ app.get('/students', (req, res) => {
   });
 });
 
+// eslint-disable-next-line
 app.use((req, res) => {
   res.statusCode = 404;
   res.end('Not Found');
 });
 
+// eslint-disable-next-line
 app.listen(1245, () => {
   console.log('Server is listening on port 1245');
 });
